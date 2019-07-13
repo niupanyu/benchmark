@@ -24,15 +24,14 @@ func HandleRead(conn net.Conn, done chan string){
 	_, err := conn.Read(buf)
 	if err != nil{
 		fmt.Println("Error to read message:", err.Error())
-		return
+		//return
 	}
 	done <- "Read"
 }
 
 
 func Benckmark( host string,   port int,  msg string) error {
-	conn, err := net.Dial("tcp", "127.0.0.1:19000")
-
+	conn, err := net.DialTimeout("tcp", "127.0.0.1:19000",time.Second)
 	if err != nil{
 		fmt.Println("Error connecting:", err)
 		return err
@@ -54,8 +53,8 @@ func main() {
 	port :=flag.Int("Port", 19000, "Port")
 	//timeout := flag.Int("Timeout", 1000, "Timeout")
 	//size := flag.Int("Size", 4096, "size for server to return")
-	count := flag.Int("Count", 100, "Total request to be send")
-	max := flag.Int("Max", 10000, "Max request to be send at one time")
+	count := flag.Int("Count", 1000, "Total request to be send")
+	max := flag.Int("Max", 1000, "Max request to be send at one time")
 	file := flag.String("File","./request.log", "Log file")
 	flag.Parse()
 
@@ -88,7 +87,7 @@ func main() {
 					log.Printf("%d|%d|%d|%d|%s", id, 1, 0, failCost, err.Error())
 					return
 				}
-				
+
 				cost := (time.Now().UnixNano() -st)/ int64(time.Microsecond)
 				//jobid, succ or fail , length, costtime, error msg
 				log.Printf("%d|%d|%d|%d", id, 0, len(result), cost)

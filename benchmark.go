@@ -59,8 +59,7 @@ func main() {
 	file := flag.String("File","./request.log", "Log file")
 	flag.Parse()
 
-	fmt.Println("requests=",*c, " concurrency=", *n)
-
+	fmt.Println("requests=",*n, " concurrency=", *c)
 	logFile, err := os.OpenFile(*file, os.O_RDWR | os.O_CREATE | os.O_APPEND, 0644)
 	defer logFile.Close()
 	if err != nil{
